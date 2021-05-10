@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Recipe Book</title>
+       <link rel="stylesheet" href="style.css" >
+       <link rel="stylesheet" href="fontAwesome/css/all.css" >
+    </head>
+    
+    <body class="body-meals"> 
+        <div id="header">
+            <a href="index.html">
+                <i class="fas fa-chevron-circle-left"></i>
+            </a>
+            <img src="images/logo-text.png">
+        </div>                              
+        <div id="meals">
+            <div class="meals-list" id="output">
+
+
+            </div>
+            
+        </div>
+
+        <script>
+            var category = getCategory();
+
+            function getRecipeList(){
+                var rootPath = 'https://mysite.itvarsity.org/api/recipe-book/';
+                var fullPath = rootPath + 'get-recipes/?category=' + category;
+
+                fetch(fullPath)
+                .then(function(response){
+                    return response.json();
+                })
+                .then(function(data){
+                    var output = "";  
+
+                    for(i = 0; i < data.length; i++){
+                        output += `
+                        <a href="show-recipe.html?id=${data[i].id}">
+                            <div class="meals-list-item">
+                                <h1>${data[i].title} <i class="fas fa-chevron-circle-right"></i> </h1>
+                                <p>Description : ${data[i].description}</p>
+                            </div>
+                        </a>
+                                 `
+                    }
+                    document.getElementById('output').innerHTML = output;
+                })
+            }
+
+            getRecipeList();
+
+            function getCategory(){
+                var url = window.location.href;
+                var idx = url.indexOf('=');
+                var category = url.substring(idx +1);
+
+                return category;
+            }
+
+        </script>
+    </body>
+</html>
